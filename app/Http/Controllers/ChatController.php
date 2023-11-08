@@ -3,35 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
 
 class ChatController extends Controller
 {
-    public function chat(Request $request)
+    public function generateApplication(Request $request)
     {
-        $inputText = $request->food;
-        if ($inputText != null) {
-            $responseText = $this->generateResponse($inputText);
+        // 共通ルールと顧客情報のテキストファイルを読み込む
+        $commonRules = Storage::get('00_Common_rules.txt');
+        $customerInformation = Storage::get('01_Customer_information_rules.txt');
 
-            $messages = [
-                ['title' => '食材', 'content' => $inputText],
-                ['title' => 'レシピ', 'content' => $responseText]
-            ];
-            return view('chat.create', ['messages' => $messages]);
+        // 各章の追加ルールファイルを読み込む
+        $chapters = [
+            '02_Company_overview_rules.txt',
+            '03_Needs_and_market_trend_rules.txt',
+            '04_Strengths_rules.txt',
+            '05_Management_policy_rules.txt',
+        ];
+
+        // 各章ごとに文章を生成
+        $generatedTexts = [];
+
+        foreach ($chapters as $index => $chapterFile) {
+            $chapterContent = Storage::get($chapterFile);
+
+            // 共通ルール、顧客情報、および現在の章のルールを組み合わせる
+            $prompt = $commonRules . "\n" . $customerInformation . "\n" . $chapterContent;
+
+            // APIに送信し、応答を取得
+            $response = OpenAI::completions()->create([
+                'model' => 'gpt-3.5-turbo-instruct',
+                'prompt' => $prompt,
+                'temperature' => 0.1,
+                'max_tokens' => 50,
+            ]);
+
+            // 応答のテキストを配列に保存
+            $generatedTexts["chapter".($index+1)] = $response['choices'][0]['text'];
         }
-        return view('chat.create');
-    }
 
-    public function generateResponse($inputText)
-    {
-        // completionsは一回で会話が終了するタイプなので、roleは入れられない
-        // chatだと会話が継続するタイプなので、roleの設定が必要になる
-        $result = OpenAI::completions()->create([
-            'model' => 'gpt-3.5-turbo-instruct',
-            'prompt' => '冷蔵庫にある食材を教えます。' . $inputText . '美味しいレシピを5文以内で教えてください。',
-            'temperature' => 0.8,
-            'max_tokens' => 150,
-        ]);
-        return $result['choices'][0]['text'];
+        // 生成された各章のテキストを合体させる
+        $applicationText = implode("\n\n", $generatedTexts);
+
+        // 結果を表示するビューにデータを渡す
+        return view('application.create', ['applicationText' => $applicationText]);
     }
 }

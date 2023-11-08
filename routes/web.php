@@ -14,8 +14,7 @@ use App\Http\Controllers\ChatController;
 |
 */
 
-Route::get('/chat', [ChatController::class, 'chat'])->name('chat.create');
-Route::post('/chat', [ChatController::class, 'chat'])->name('chat.post');
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/generate-application', [ChatController::class, 'generateApplication'])->name('application.generate');
+Route::post('/generate-application', [ChatController::class, 'generateApplication'])->name('application.generate');
+
