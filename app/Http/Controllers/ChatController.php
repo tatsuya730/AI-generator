@@ -24,6 +24,8 @@ class ChatController extends Controller
 
     public function generateResponse($inputText)
     {
+        // completionsは一回で会話が終了するタイプなので、roleは入れられない
+        // chatだと会話が継続するタイプなので、roleの設定が必要になる
         $result = OpenAI::completions()->create([
             'model' => 'gpt-3.5-turbo-instruct',
             'prompt' => '冷蔵庫にある食材を教えます。' . $inputText . '美味しいレシピを5文以内で教えてください。',
