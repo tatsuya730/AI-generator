@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <!-- ビューポートの設定を行い、レスポンシブデザインに対応 -->
@@ -10,12 +11,16 @@
     <!-- preタグ内でのテキストの折り返しを有効にするためのスタイル -->
     <style>
         pre {
-            white-space: pre-wrap;       /* 改行と空白を保持しつつ、必要に応じて折り返しを行う */
-            word-wrap: break-word;       /* 長い単語が端に達した場合に折り返す */
-            overflow-wrap: break-word;   /* 長い単語が端に達した場合に折り返す */
+            white-space: pre-wrap;
+            /* 改行と空白を保持しつつ、必要に応じて折り返しを行う */
+            word-wrap: break-word;
+            /* 長い単語が端に達した場合に折り返す */
+            overflow-wrap: break-word;
+            /* 長い単語が端に達した場合に折り返す */
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-4">
         <h1>申請書のプレビュー</h1>
@@ -36,11 +41,21 @@
                 <pre>{{ $applicationText }}</pre>
             </div>
         </div>
-        
+
         <!-- 申請書の再生成ボタン -->
-        <a href="{{ url('/generate-application') }}" class="btn btn-primary mt-3">新しい申請書を生成</a>
+        <!-- 削除した 'a' タグのリンク -->
+        <!-- この部分は削除またはコメントアウトしてください -->
+        <!-- <a href="{{ url('/generate-application') }}" class="btn btn-primary mt-3">新しい申請書を生成</a> -->
+
+        <!-- 申請書の再生成ボタン -->
+        <form action="{{ route('application.generate') }}" method="POST">
+            @csrf <!-- CSRFトークンを追加 -->
+            <button type="submit" class="btn btn-primary mt-3">新しい申請書を生成</button>
+        </form>
+
     </div>
     <!-- Laravelのアセット関数を使用して、JavaScriptバンドルへのリンクを挿入 -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
+
 </html>

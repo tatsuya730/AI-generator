@@ -8,6 +8,17 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class ChatController extends Controller
 {
+
+    // 新しいメソッドをChatControllerに追加します。
+    public function showApplicationForm()
+    {
+        // 既存のセッションデータを取得するか、デフォルト値を設定します。
+        $applicationText = session()->get('application_text', '');
+
+        // 'application.create' ビューにデータを渡します。
+        return view('application.create', ['applicationText' => $applicationText]);
+    }
+
     public function generateApplication(Request $request)
     {
         // 共通ルールと顧客情報のテキストファイルを読み込む
@@ -40,7 +51,7 @@ class ChatController extends Controller
             ]);
 
             // 応答のテキストを配列に保存
-            $generatedTexts["chapter".($index+1)] = $response['choices'][0]['text'];
+            $generatedTexts["chapter" . ($index + 1)] = $response['choices'][0]['text'];
         }
 
         // 生成された各章のテキストを合体させる
