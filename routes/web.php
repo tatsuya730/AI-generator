@@ -17,8 +17,12 @@ use App\Http\Controllers\ChatController;
 // このルートは初期ページ表示用です。
 Route::get('/application', [ChatController::class, 'showApplicationForm'])->name('application.form');
 
-// このルートはフォームの送信とファイルアップロードの両方の機能を兼ねるようになります。
+// このルートはフォームの送信に使用されます。
 Route::post('/generate-application', [ChatController::class, 'generateApplication'])->name('application.generate');
+
+// ファイルアップロードのルートを追加
+Route::post('/file-upload', [ChatController::class, 'uploadFile'])->name('file.upload');
+
 
 Route::get('/', function () {
     return view('welcome');

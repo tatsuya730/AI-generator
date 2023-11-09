@@ -8,7 +8,6 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class ChatController extends Controller
 {
-
     // 新しいメソッドをChatControllerに追加します。
     public function showApplicationForm()
     {
@@ -23,9 +22,12 @@ class ChatController extends Controller
     {
         // ファイルの存在確認
         if ($request->hasFile('file')) {
-            // ファイルを保存
-            $path = $request->file('file')->storeAs('rules', '01_Customer_information_rules.txt');
-            
+            // ファイルの内容を読み込む
+            $fileContent = file_get_contents($request->file('file')->getRealPath());
+
+            // ファイルの内容をセッションに保存
+            session(['uploaded_file_content' => $fileContent]);
+
             // ファイルアップロードの成功メッセージ
             return back()->with('status', 'ファイルが正常にアップロードされました。');
         }
@@ -34,22 +36,15 @@ class ChatController extends Controller
         return back()->with('error', 'ファイルがアップロードされていません。');
     }
 
-public function generateApplication(Request $request)
-{
-        // ファイルのアップロード処理を追加
-        if ($request->hasFile('file')) {
-            // ファイルを保存
-            $path = $request->file('file')->store('rules', 'public');
-            // 保存したファイルパスを使用するか、または後続の処理に変更が必要かもしれません。
-        } else {
-            // ファイルがアップロードされていない場合の処理をここに追加します。
-            // 例: エラーメッセージをセッションに追加
-            return back()->with('error', 'ファイルがアップロードされていません。');
-        }
+    public function generateApplication(Request $request)
+    {
+        // セッションからアップロードされたファイルの内容を取得
+        $fileContent = session('uploaded_file_content', '');
 
-        // 共通ルールと顧客情報のテキストファイルを読み込む
+        // 共通ルールファイルを読み込む
         $commonRules = Storage::get('00_Common_rules.txt');
-        $customerInformation = Storage::get('01_Customer_information_rules.txt');
+        // 顧客情報ルールファイルを読み込む変数名を変更している
+        $customerInformationRules = Storage::get('01_Customer_information_rules.txt'); 
 
         // 各章の追加ルールファイルを読み込む
         $chapters = [
@@ -65,8 +60,8 @@ public function generateApplication(Request $request)
         foreach ($chapters as $index => $chapterFile) {
             $chapterContent = Storage::get($chapterFile);
 
-            // 共通ルール、顧客情報、および現在の章のルールを組み合わせる
-            $prompt = $commonRules . "\n" . $customerInformation . "\n" . $chapterContent;
+            // 共通ルール、顧客情報ルール、および現在の章のルールを組み合わせる
+            $prompt = $commonRules . "\n" . $fileContent . "\n" . $customerInformationRules . "\n" . $chapterContent;
 
             // APIに送信し、応答を取得
             $response = OpenAI::completions()->create([
@@ -86,7 +81,7 @@ public function generateApplication(Request $request)
         // 生成されたテキストをセッションに保存する
         session(['application_text' => $applicationText]);
         
-        // 結果を表示するビューにリダイレクトしてデータを渡す（変更する部分）
+        // 結果を表示するビューにリダイレクトしてデータを渡す
         return redirect()->route('application.form')->with('application_text', $applicationText);
     }
 
