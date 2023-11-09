@@ -38,13 +38,11 @@ class ChatController extends Controller
 
     public function generateApplication(Request $request)
     {
-        // セッションからアップロードされたファイルの内容を取得
-        $fileContent = session('uploaded_file_content', '');
-
         // 共通ルールファイルを読み込む
         $commonRules = Storage::get('00_Common_rules.txt');
-        // 顧客情報ルールファイルを読み込む変数名を変更している
-        $customerInformationRules = Storage::get('01_Customer_information_rules.txt'); 
+
+        // セッションからアップロードされたファイルの内容を取得
+        $fileContent = session('uploaded_file_content', '');
 
         // 各章の追加ルールファイルを読み込む
         $chapters = [
@@ -61,14 +59,14 @@ class ChatController extends Controller
             $chapterContent = Storage::get($chapterFile);
 
             // 共通ルール、顧客情報ルール、および現在の章のルールを組み合わせる
-            $prompt = $commonRules . "\n" . $fileContent . "\n" . $customerInformationRules . "\n" . $chapterContent;
+            $prompt = $commonRules . "\n" . $fileContent . "\n" . $chapterContent;
 
             // APIに送信し、応答を取得
             $response = OpenAI::completions()->create([
                 'model' => 'gpt-3.5-turbo-instruct',
                 'prompt' => $prompt,
                 'temperature' => 0.1,
-                'max_tokens' => 50,
+                'max_tokens' => 500,
             ]);
 
             // 応答のテキストを配列に保存
@@ -80,9 +78,8 @@ class ChatController extends Controller
 
         // 生成されたテキストをセッションに保存する
         session(['application_text' => $applicationText]);
-        
+
         // 結果を表示するビューにリダイレクトしてデータを渡す
         return redirect()->route('application.form')->with('application_text', $applicationText);
     }
-
 }
