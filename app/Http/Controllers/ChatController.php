@@ -19,8 +19,34 @@ class ChatController extends Controller
         return view('application.create', ['applicationText' => $applicationText]);
     }
 
-    public function generateApplication(Request $request)
+    public function uploadFile(Request $request)
     {
+        // ファイルの存在確認
+        if ($request->hasFile('file')) {
+            // ファイルを保存
+            $path = $request->file('file')->storeAs('rules', '01_Customer_information_rules.txt');
+            
+            // ファイルアップロードの成功メッセージ
+            return back()->with('status', 'ファイルが正常にアップロードされました。');
+        }
+
+        // ファイルがない場合のエラーメッセージ
+        return back()->with('error', 'ファイルがアップロードされていません。');
+    }
+
+public function generateApplication(Request $request)
+{
+        // ファイルのアップロード処理を追加
+        if ($request->hasFile('file')) {
+            // ファイルを保存
+            $path = $request->file('file')->store('rules', 'public');
+            // 保存したファイルパスを使用するか、または後続の処理に変更が必要かもしれません。
+        } else {
+            // ファイルがアップロードされていない場合の処理をここに追加します。
+            // 例: エラーメッセージをセッションに追加
+            return back()->with('error', 'ファイルがアップロードされていません。');
+        }
+
         // 共通ルールと顧客情報のテキストファイルを読み込む
         $commonRules = Storage::get('00_Common_rules.txt');
         $customerInformation = Storage::get('01_Customer_information_rules.txt');

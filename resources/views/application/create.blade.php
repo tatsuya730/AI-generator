@@ -31,9 +31,13 @@
             </div>
         @endif
 
-        <!-- 申請書の再生成ボタン -->
-        <form action="{{ route('application.generate') }}" method="POST">
+        <!-- 申請書とファイルアップロードの統合フォーム -->
+        <form action="{{ route('application.generate') }}" method="POST" enctype="multipart/form-data">
             @csrf <!-- CSRFトークンを追加 -->
+            <div class="form-group">
+                <label for="file">顧客情報ルールファイル:</label>
+                <input type="file" class="form-control-file" id="file" name="file">
+            </div>
             <button type="submit" class="btn btn-primary mt-3">新しい申請書を生成</button>
         </form>
 

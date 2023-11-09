@@ -17,9 +17,8 @@ use App\Http\Controllers\ChatController;
 // このルートは初期ページ表示用です。
 Route::get('/application', [ChatController::class, 'showApplicationForm'])->name('application.form');
 
-// このルートはフォームの送信に使用されます。
+// このルートはフォームの送信とファイルアップロードの両方の機能を兼ねるようになります。
 Route::post('/generate-application', [ChatController::class, 'generateApplication'])->name('application.generate');
-
 
 Route::get('/', function () {
     return view('welcome');
