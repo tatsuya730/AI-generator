@@ -23,7 +23,7 @@
 
 <body>
     <div class="container mt-4">
-        <h1>申請書のプレビュー</h1>
+        <h1>AI補助金ジェネレーター</h1>
         <!-- セッションメッセージがある場合は表示 -->
         @if (session('status'))
             <div class="alert alert-success" role="alert">
@@ -31,27 +31,22 @@
             </div>
         @endif
 
-        <!-- 申請書テキストの表示エリア -->
-        <div class="card">
-            <div class="card-header">
-                生成された申請書
-            </div>
-            <div class="card-body">
-                <!-- preタグを使用してフォーマットされたテキストを表示 -->
-                <pre>{{ $applicationText }}</pre>
-            </div>
-        </div>
-
-        <!-- 申請書の再生成ボタン -->
-        <!-- 削除した 'a' タグのリンク -->
-        <!-- この部分は削除またはコメントアウトしてください -->
-        <!-- <a href="{{ url('/generate-application') }}" class="btn btn-primary mt-3">新しい申請書を生成</a> -->
-
         <!-- 申請書の再生成ボタン -->
         <form action="{{ route('application.generate') }}" method="POST">
             @csrf <!-- CSRFトークンを追加 -->
             <button type="submit" class="btn btn-primary mt-3">新しい申請書を生成</button>
         </form>
+
+        <!-- 区切りの線を表示 -->
+        <hr>
+
+        <!-- 申請書テキストの表示エリア -->
+        <div class="card">
+            <div class="card-body">
+                <!-- preタグを使用してフォーマットされたテキストを表示 -->
+                <pre>{{ $applicationText }}</pre>
+            </div>
+        </div>
 
     </div>
     <!-- Laravelのアセット関数を使用して、JavaScriptバンドルへのリンクを挿入 -->
