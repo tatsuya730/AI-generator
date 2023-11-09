@@ -31,6 +31,7 @@
             </div>
         @endif
 
+
         <!-- ファイルアップロードフォーム -->
         <form action="{{ route('file.upload') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -55,9 +56,32 @@
             </div>
         </div>
 
+        <!-- 区切りの線を表示 -->
+        <hr>
+
     </div>
     <!-- Laravelのアセット関数を使用して、JavaScriptバンドルへのリンクを挿入 -->
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <!-- コピー用ボタンを追加 -->
+    <button id="copyButton" class="btn btn-secondary mt-3">テキストをコピー</button>
+
+    <!-- コピー機能のJavaScript -->
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            // テキストを選択してコピー
+            var text = document.querySelector('pre').innerText; // preタグ内のテキストを取得
+            var elem = document.createElement('textarea'); // テキストエリアを動的に作成
+            document.body.appendChild(elem); // テキストエリアをbodyに追加
+            elem.value = text; // テキストエリアの値にテキストを設定
+            elem.select(); // テキストエリアのテキストを選択
+            document.execCommand('copy'); // テキストをコピー
+            document.body.removeChild(elem); // テキストエリアをbodyから削除
+            // コピー完了のアラート（必要に応じてカスタマイズしてください）
+            alert('テキストがコピーされました');
+        });
+    </script>
+
 </body>
 
 </html>
