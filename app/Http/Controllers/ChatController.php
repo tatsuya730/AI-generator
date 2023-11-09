@@ -12,11 +12,11 @@ class ChatController extends Controller
     // 新しいメソッドをChatControllerに追加します。
     public function showApplicationForm()
     {
-        // 既存のセッションデータを取得するか、デフォルト値を設定します。
-        $applicationText = session()->get('application_text', '');
+        // showApplicationFormが呼ばれるたびにセッションをクリアする
+        session()->forget('application_text');
 
-        // 'application.create' ビューにデータを渡します。
-        return view('application.create', ['applicationText' => $applicationText]);
+        // 'application.create' ビューをデフォルトの空テキストで表示する
+        return view('application.create', ['applicationText' => '']);
     }
 
     public function generateApplication(Request $request)
@@ -56,6 +56,10 @@ class ChatController extends Controller
 
         // 生成された各章のテキストを合体させる
         $applicationText = implode("\n\n", $generatedTexts);
+
+        // 生成されたテキストをセッションに保存する
+        session(['application_text' => $applicationText]);
+        
 
         // 結果を表示するビューにデータを渡す
         return view('application.create', ['applicationText' => $applicationText]);
