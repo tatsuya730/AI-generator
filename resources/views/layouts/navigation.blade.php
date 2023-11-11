@@ -30,7 +30,6 @@
                     <a href="{{ route('register') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">サインアップ</a>
                 @else
                     <a href="{{ route('profile.edit') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">プロフィール</a>
-                    <a href="{{ route('posts.create') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">投稿を作成</a>
                     <a href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();"
