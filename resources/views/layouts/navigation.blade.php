@@ -1,3 +1,24 @@
+<style>
+.text-white {
+    font-weight: bold; /* ここでテキストの太さを指定 */
+}
+
+/* "補助金を生成する" ボタンのスタイル */
+.generate-subidy-btn {
+    background-color: green; /* ボタンの背景色を緑に */
+    font-weight: bold; /* ここでテキストの太さを指定 */
+    color: white; /* テキストの色を白に */
+    padding: 0.75rem 1.5rem; /* パディングを設定 */
+    border-radius: 0.375rem; /* ボーダーの丸みを設定 */
+    text-decoration: none; /* テキストの下線を消す */
+    transition: background-color 0.2s; /* 背景色のトランジションを設定 */
+}
+
+.generate-subidy-btn:hover {
+    background-color: darkgreen; /* ホバー時の背景色を濃い緑に */
+}
+</style>
+
 <nav x-data="{ open: false }" class="bg-black border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,6 +50,12 @@
                     <a href="{{ route('login') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">ログイン</a>
                     <a href="{{ route('register') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">サインアップ</a>
                 @else
+                    <div class="flex items-center ml-6">
+                    <!-- "補助金を生成する" ボタンを追加 -->
+                    <a href="{{ route('application.form') }}" class="generate-subidy-btn">
+                        補助金を生成する
+                    </a>
+                    </div>
                     <a href="{{ route('profile.edit') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">プロフィール</a>
                     <a href="{{ route('logout') }}"
                     onclick="event.preventDefault();
