@@ -95,7 +95,7 @@ class ChatController extends Controller
         // 結果を表示するビューにリダイレクトしてデータを渡す
         return redirect()->route('application.form')->with([
             'application_text' => $applicationText,
-            'status' => '申請書が生成されました。コインが100減りました。'
+            'status' => '100コインを消費して、申請書が生成されました。'
         ]);
     }
 }

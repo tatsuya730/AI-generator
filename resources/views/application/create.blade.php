@@ -1,87 +1,103 @@
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <!-- ビューポートの設定を行い、レスポンシブデザインに対応 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>申請書生成アプリケーション</title>
-    <!-- Laravelのアセット関数を使用して、CSSファイルへのリンクを挿入 -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <!-- preタグ内でのテキストの折り返しを有効にするためのスタイル -->
-    <style>
-        pre {
-            white-space: pre-wrap;
-            /* 改行と空白を保持しつつ、必要に応じて折り返しを行う */
-            word-wrap: break-word;
-            /* 長い単語が端に達した場合に折り返す */
-            overflow-wrap: break-word;
-            /* 長い単語が端に達した場合に折り返す */
-        }
-    </style>
-</head>
-
-<body>
+<x-app-layout>
     <div class="container mt-4">
         <h1>AI補助金ジェネレーター</h1>
-        <!-- セッションメッセージがある場合は表示 -->
+
+        <!-- ステータスメッセージ -->
+        <div id="status-message" class="status-message" style="display: none; margin-bottom: 20px; padding: 10px; background-color: #ffdd57; border-radius: 5px; text-align: center;">現在文章を生成中...</div>
+
         @if (session('status'))
-            <div class="alert alert-success" role="alert">
+            <div class="alert" role="alert" style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px;">
                 {{ session('status') }}
             </div>
         @endif
 
-
         <!-- ファイルアップロードフォーム -->
-        <form action="{{ route('file.upload') }}" method="POST" enctype="multipart/form-data">
+        <form id="file-upload-form" action="{{ route('file.upload') }}" method="POST" enctype="multipart/form-data" style="margin-bottom: 20px;">
             @csrf
-            <input type="file" name="file" required> <!-- この行を修正 -->
-            <button type="submit" class="btn btn-success mt-3">ファイルをアップロード</button>
+            <label style="display: inline-block; padding: 6px 12px; cursor: pointer; background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 4px; margin-right: 8px;">
+                ファイルを選択<input type="file" id="file-input" name="file" hidden required onchange="updateFileName()">
+            </label>
+            <span id="file-name">選択されていません</span>
+            <button type="submit" class="upload-button">ファイルをアップロード</button>
         </form>
 
         <!-- 申請書の再生成ボタン -->
-        <form action="{{ route('application.generate') }}" method="POST">
-            @csrf <!-- CSRFトークンを追加 -->
-            <button type="submit" class="btn btn-primary mt-3">新しい申請書を生成</button>
+        <form id="application-form" action="{{ route('application.generate') }}" method="POST" style="margin-bottom: 20px;">
+            @csrf
+            <button type="submit" class="generate-button">新しい申請書を生成</button>
         </form>
 
-        <!-- 区切りの線を表示 -->
         <hr>
 
         <!-- 申請書テキストの表示エリア -->
-        <div class="card">
-            <div class="card-body">
-                <!-- preタグを使用してフォーマットされたテキストを表示 -->
-                <pre>{{ $applicationText }}</pre>
-            </div>
+        <div class="text-display-area" style="background-color: #fff; border: 1px solid #ced4da; border-radius: 4px; padding: 15px; margin-bottom: 20px;">
+            <pre>{{ $applicationText ?? '' }}</pre>
         </div>
 
-        <!-- 区切りの線を表示 -->
         <hr>
 
+        <!-- コピー用ボタン -->
+        <button id="copyButton" class="copy-button">テキストをコピー</button>
     </div>
-    <!-- Laravelのアセット関数を使用して、JavaScriptバンドルへのリンクを挿入 -->
+
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <!-- コピー用ボタンを追加 -->
-    <button id="copyButton" class="btn btn-secondary mt-3">テキストをコピー</button>
-
-    <!-- コピー機能のJavaScript -->
     <script>
+        function updateFileName() {
+            var input = document.getElementById('file-input');
+            var fileName = input.files.length > 0 ? input.files[0].name : "選択されていません";
+            document.getElementById('file-name').textContent = fileName;
+        }
+
+        document.getElementById('application-form').addEventListener('submit', function() {
+            document.getElementById('status-message').style.display = 'block'; // 生成中メッセージを表示
+        });
+
         document.getElementById('copyButton').addEventListener('click', function() {
-            // テキストを選択してコピー
-            var text = document.querySelector('pre').innerText; // preタグ内のテキストを取得
-            var elem = document.createElement('textarea'); // テキストエリアを動的に作成
-            document.body.appendChild(elem); // テキストエリアをbodyに追加
-            elem.value = text; // テキストエリアの値にテキストを設定
-            elem.select(); // テキストエリアのテキストを選択
-            document.execCommand('copy'); // テキストをコピー
-            document.body.removeChild(elem); // テキストエリアをbodyから削除
-            // コピー完了のアラート（必要に応じてカスタマイズしてください）
+            var text = document.querySelector('pre').innerText;
+            var elem = document.createElement('textarea');
+            document.body.appendChild(elem);
+            elem.value = text;
+            elem.select();
+            document.execCommand('copy');
+            document.body.removeChild(elem);
             alert('テキストがコピーされました');
         });
     </script>
+</x-app-layout>
 
-</body>
-
-</html>
+<style>
+    .status-message {
+        /* 生成中のステータスメッセージスタイル */
+        background-color: #ffcc00;
+        color: #333;
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .upload-button, .generate-button, .copy-button {
+        /* ボタン共通スタイル */
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: 8px; /* ラベルとボタンの間隔を適切に */
+    }
+    .upload-button {
+        background-color: #28a745;
+        color: white;
+    }
+    .generate-button {
+        background-color: #007bff;
+        color: white;
+    }
+    .copy-button {
+        background-color: #6c757d;
+        color: white;
+    }
+    .text-display-area pre {
+        /* テキスト表示エリアスタイル */
+        margin-bottom: 0;
+    }
+</style>
