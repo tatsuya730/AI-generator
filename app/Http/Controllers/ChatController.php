@@ -66,7 +66,7 @@ class ChatController extends Controller
                 'model' => 'gpt-3.5-turbo-instruct',
                 'prompt' => $prompt,
                 'temperature' => 0.1,
-                'max_tokens' => 500,
+                'max_tokens' => 50,
             ]);
 
             // 応答のテキストを配列に保存
