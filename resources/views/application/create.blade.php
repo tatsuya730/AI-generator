@@ -1,6 +1,10 @@
 <x-app-layout>
     <div class="container mt-4">
-        <h1>AI補助金ジェネレーター</h1>
+
+        <!-- コイン残高を表示するセクション -->
+        <div class="coin-balance" style="margin-bottom: 20px;">
+            <h2>現在のコイン残高: <span id="coin-balance">{{ Auth::user()->coins ?? 'Loading...' }}</span> コイン</h2>
+        </div>
 
         <!-- ステータスメッセージ -->
         <div id="status-message" class="status-message" style="display: none; margin-bottom: 20px; padding: 10px; background-color: #ffdd57; border-radius: 5px; text-align: center;">現在文章を生成中...</div>
@@ -99,5 +103,14 @@
     .text-display-area pre {
         /* テキスト表示エリアスタイル */
         margin-bottom: 0;
+    }
+    /* コイン残高表示スタイル */
+    .coin-balance h2 {
+        font-size: 1rem;
+        color: #4a5568; /* テキストの色 */
+        padding: 10px;
+        background-color: #e2e8f0; /* 背景色 */
+        border-radius: 5px;
+        text-align: center; /* テキストを中央揃え */
     }
 </style>
