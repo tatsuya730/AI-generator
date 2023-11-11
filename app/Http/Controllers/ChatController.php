@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -38,6 +39,14 @@ class ChatController extends Controller
 
     public function generateApplication(Request $request)
     {
+        $user = Auth::user(); // 現在のユーザーを取得
+
+        // ユーザーのコインが足りるかチェック
+        if ($user->coins < 100) {
+            // コインが不足している場合はエラーメッセージと共にリダイレクト
+            return back()->with('error', 'コインが不足しています。');
+        }
+
         // 共通ルールファイルを読み込む
         $commonRules = Storage::get('00_Common_rules.txt');
 
@@ -79,7 +88,14 @@ class ChatController extends Controller
         // 生成されたテキストをセッションに保存する
         session(['application_text' => $applicationText]);
 
+        // ユーザーのコインを減らす
+        $user->coins -= 100;
+        $user->save(); // コインの変更をデータベースに保存
+
         // 結果を表示するビューにリダイレクトしてデータを渡す
-        return redirect()->route('application.form')->with('application_text', $applicationText);
+        return redirect()->route('application.form')->with([
+            'application_text' => $applicationText,
+            'status' => '申請書が生成されました。コインが100減りました。'
+        ]);
     }
 }
