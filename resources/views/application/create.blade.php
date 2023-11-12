@@ -104,6 +104,16 @@
         /* テキスト表示エリアスタイル */
         margin-bottom: 0;
     }
+
+    .text-display-area pre {
+        /* テキスト表示エリアスタイル */
+        margin-bottom: 0;
+        max-height: 300px; /* 最大高さを設定 */
+        overflow-y: auto; /* 垂直方向のオーバーフロー時にスクロールバーを表示 */
+        white-space: pre-wrap; /* 折り返しを許可 */
+        word-wrap: break-word; /* 単語の途中で折り返しを許可 */
+    }
+
     /* コイン残高表示スタイル */
     .coin-balance h2 {
         font-size: 1rem;
