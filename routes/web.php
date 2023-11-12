@@ -63,7 +63,7 @@ Route::prefix('payment')->name('payment.')->group(function () {
 });
 
 // 支払いページのルート
-Route::get('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
+// Route::get('/payment/create', [PaymentController::class, 'create'])->name('payment.create');
 
 
 require __DIR__.'/auth.php';

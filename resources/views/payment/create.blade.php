@@ -15,6 +15,7 @@
             <div style="margin-bottom: 20px; font-weight: bold;">Stripe決済</div>
             <form id="card-form" action="{{ route('payment.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="amount" value="{{ $amount }}">
                 <div style="margin-bottom: 20px;">
                     <label for="card_number" style="display: block; margin-bottom: 10px;">カード番号</label>
                     <div id="card-number" style="padding: 10px; border: 1px solid #ced4da; border-radius: 5px;"></div>
