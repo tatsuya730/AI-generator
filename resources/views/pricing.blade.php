@@ -15,21 +15,21 @@
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 font-medium text-gray-900">1回生成</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 text-gray-500 text-right">¥10,000</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-right text-base leading-5 font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900 font-semibold">100コインチャージ</a>
+                                <a href="https://buy.stripe.com/test_4gw01B2017lI7kY3cc" class="text-indigo-600 hover:text-indigo-900 font-semibold">100コインチャージ</a>
                             </td>
                         </tr>
                         <tr>
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 font-medium text-gray-900">3回生成</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 text-gray-500 text-right">¥20,000</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-right text-base leading-5 font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900 font-semibold">300コインチャージ</a>
+                                <a href="https://buy.stripe.com/test_9AQ29J8op21oeNqaEF" class="text-indigo-600 hover:text-indigo-900 font-semibold">300コインチャージ</a>
                             </td>
                         </tr>
                         <tr>
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 font-medium text-gray-900">10回生成</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-base leading-5 text-gray-500 text-right">¥50,000</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-right text-base leading-5 font-medium">
-                                <a href="#" class="text-indigo-600 hover:text-indigo-900 font-semibold">1000コインチャージ</a>
+                                <a href="https://buy.stripe.com/test_14k8y7cEF7lIbBe6oq" class="text-indigo-600 hover:text-indigo-900 font-semibold">1,000コインチャージ</a>
                             </td>
                         </tr>
                     </tbody>
