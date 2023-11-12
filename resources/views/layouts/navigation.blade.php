@@ -34,7 +34,7 @@
 
             <!-- 新しいリンクを追加 -->
             <div class="flex items-center ml-6">
-                <a href="{{ route('learn.subsidy') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">
+                <a href="{{ route('root') }}" class="text-sm text-white hover:bg-gray-700 px-3 py-2 rounded-md transition ease-in-out duration-150">
                     補助金について知る
                 </a>
 
